@@ -1,5 +1,5 @@
 # Toolbox
-Set of backend computational tools for all branded projects in the Lifemapper and 
+Set of backend computational tools for all branded projects in the Lifemapper and
 Specify Network Universe.
 
 Computational workflows are accepted as (CCTools) Makeflows, initiated by Workers.
@@ -10,8 +10,8 @@ Also known as Asynchronous Workflow Machine
 
 
 ## Goals
-Toolbox that will perform computations on well-defined inputs producing defined outputs.  
-This will perform calculations for Lifemapper  
+Toolbox that will perform computations on well-defined inputs producing defined outputs.
+This will perform calculations for Lifemapper
 
 
 ## Initial data categories:
@@ -22,9 +22,9 @@ This will perform calculations for Lifemapper
     * species: Bison, Bison, "Genus level, two extant and six extinct species of bison"
     * environmental: BIO1, annual_temp, "Annual Mean Temperature"
     * scenario: WORLDCLIM-curr, curr_climate, "Worldclim 1.4 Bioclimatic variables"
-    * biogeo hypotheses: continental_divide, "Continental Divide", 
+    * biogeo hypotheses: continental_divide, "Continental Divide",
     * shpgrid: shapegrid_na1, "NA 1 degree", "North American, 1 degree resolution"
-  
+
 **geolayer**
   * filename, typeodata, metadata (dict)
   * categories:
@@ -40,14 +40,14 @@ This will perform calculations for Lifemapper
       * shp_filename, typeodata, metadata (value meanings)
     * Shapegrid (Vector/polygon layer for assessing the contents of each cell/polygon)
       * shp_filename, typeodata (shpgrid)
-    
+
 **scenario**: list of raster (all environmental data)
   * [envraster, ...], typeodata
 
 
 ## Initial tools:
 
-All tools create metadata which can be stored, converted to EML, used for packaging.  
+All tools create metadata which can be stored, converted to EML, used for packaging.
 Metadata from multi-step workflows can be aggregated to describe the final outputs of
 workflow, and provide information for query and package display.
 
@@ -58,7 +58,7 @@ workflow, and provide information for query and package display.
    * OUT: list of occdata (CSV files)
 
 **SDM**
-  * IN: list of species occurrence files 
+  * IN: list of species occurrence files
   * IN: list of scenarios (with matching spentypes)
   * IN: parameters (algorithm, algparams, modeling-typeodata)
   * OUT: list of sdm_proj
