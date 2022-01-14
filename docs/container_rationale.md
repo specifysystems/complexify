@@ -1,6 +1,9 @@
 General approach
 ================
 
+[CCTools](https://cctools.readthedocs.io/en/latest/) is the software that handles multi-step workflows and distributing jobs.   
+We use Makeflow, WorkQueue and CatalogServer.  
+
 The initial approach I am taking is to have a controlling container that manages makeflow workflows and (potentially) multiple worker
 containers that connect to this controlling container (via Docker network) to pull work and push back results via WorkQueue workers.
 
