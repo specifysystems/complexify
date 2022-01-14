@@ -7,6 +7,9 @@ containers that connect to this controlling container (via Docker network) to pu
 I think that a few more containers will become useful eventually for a web interface and some sort of light database for workflows.
 It may also be useful to have a "matt daemon" like service running in another container to connect to the controller.
 
+I used a `miniconda` base container and installed most of the dependencies with that.  It was much easier to install GDAL this way
+and get it to play nicely with numpy.  CCTools was also available (and rtree) so it made a lot of sense to start this way.
+
 Makeflow Controller Container - makeflow
 ========================================
 
