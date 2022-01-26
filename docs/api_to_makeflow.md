@@ -209,3 +209,22 @@ the species then create an output package from those models.  We could do someth
     ]
 }
 ```
+
+## Conversion from API request to Makeflow
+
+Because the inputs and outputs are defined in this sort of schema, we can utilized those to
+create Makeflows.  There are still some hurdles though as Makeflow does require known output
+files and we don't necessarily know all of the outputs of a process upon definition.
+However, we can get around this in a few ways, one of which is to actually utilize multiple
+Makeflow configurations for a single request.  For example, we do not know what species are
+contained in the occurrence data and therefore we do not know the individual files that will
+be created (assuming they are related to species name) so we could have one workflow that
+processes the occurrence data without knowing specific species outputs but it could still
+produce a known aggregate file, named something like `all_occurrences.zip` and another file
+`species_present.txt`.  At the conclusion of that makeflow, we would unzip
+`all_occurrences.zip` and create a new makeflow for creating maxent models using the species
+names that are present in `species_present.txt`.  There is a bit of magic left to figure out
+but makeflow supports submakeflows so it may be possible to still do everything in one
+umbrella process that creates sub-makeflows for future steps in earlier ones.  This isn't
+an issue with the API to Makeflow conversion so much as an issue with creating a Makeflow
+with outputs unknown at creation time.
