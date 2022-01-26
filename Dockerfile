@@ -9,14 +9,10 @@ FROM cctools as worker
 RUN apt-get update && \
     apt-get install -y git openjdk-8-jdk
 
+RUN pip install specify-lmpy
+
 RUN mkdir git && \
     cd git && \
-    git clone https://github.com/lifemapper/lmpy.git
-
-RUN cd git/lmpy && \
-    python setup.py install
-
-RUN cd git && \
     git clone https://github.com/mrmaxent/Maxent.git
 
 ENV MAXENT_VERSION=3.4.4
