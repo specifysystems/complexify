@@ -9,7 +9,7 @@ available from any of the Makeflow instances connected to the catalog server.
 
 ## Diagram
 
-![This is an image](https://github.com/specifysystems/complexify/blob/6ff41d549b966cb549cbf21c55ea87c79423c205/docs/Async%20Containers.drawio.png)
+![This is an image](https://github.com/specifysystems/complexify/blob/main/docs/Async%20Containers.drawio.png)
 
 ### Symbology
 
