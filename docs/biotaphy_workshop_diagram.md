@@ -1,6 +1,6 @@
 # Biotaphy Workshop Diagram
 
-![Diagram Image](docs/images/biotaphy_workshop_diagram.drawio.png)
+![Diagram Image](images/biotaphy_workshop_diagram.drawio.png)
 
 ## Container
 
