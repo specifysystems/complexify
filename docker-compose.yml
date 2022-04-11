@@ -1,16 +1,14 @@
 version: "3.9"
 services:
-  makeflow:
+  catalog_server:
     build:
       context: ./.
-      target: cctools
+      target: cat_server
     ports:
       - "9097:9097"
-    volumes:
-      - .:/makeflows
-    command: catalog_server -p 9097
+    command: ["catalog_server", "-p", "9097"]
   worker:
     build:
       context: ./.
       target: worker
-    command: work_queue_factory -T local -M cj* --catalog=makeflow:9097 -o worker.log
+    command: ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=catalog_server:9097"]
