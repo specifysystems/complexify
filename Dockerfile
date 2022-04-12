@@ -5,7 +5,7 @@ FROM conda/miniconda3:latest as conda_base
 
 RUN conda update -n base -c conda-forge conda
 # Install conda-pack for shrinking images
-RUN conda install -c conda-forge conda-pack
+# RUN conda install -c conda-forge conda-pack
 
 # .....................................................................................
 # Web server
@@ -32,16 +32,27 @@ ENTRYPOINT ["catalog_server", "-p", "9097"]
 
 FROM conda_base as worker
 
-RUN conda install -y -c conda-forge ndcctools gdal libspatialindex rtree git openjdk=8
+RUN conda update -n base -c conda-forge conda && \
+    conda install -y -c conda-forge ndcctools tiledb=2.2.9 gdal libspatialindex rtree git openjdk=8
+
+ENV PROJ_LIB=/usr/local/share/proj/
 
 RUN pip install specify-lmpy
 
+# Install BiotaPhyPy
 RUN mkdir git && \
     cd git && \
 	git clone https://github.com/biotaphy/BiotaPhyPy.git && \
 	cd BiotaPhyPy && \
 	pip install .
 
+# Install lmtools
+RUN cd git && \
+    git clone https://github.com/specifysystems/lmtools.git && \
+	cd lmtools && \
+	pip install .
+
+# Maxent
 RUN cd git && \
     git clone https://github.com/mrmaxent/Maxent.git
 
