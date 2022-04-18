@@ -1,0 +1,267 @@
+openapi: 3.0.1
+info:
+  title: Complexify API
+  description: API for Complexify job interactions
+  contact:
+    email: cjgrady@ku.edu
+  license:
+    name: GPL 3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.0
+servers:
+- url: https://complexify.specifysystems.org/api/
+tags:
+- name: job
+  description: Everything about a job
+- name: user
+  description: Operations about user
+  externalDocs:
+    description: Find out more about our store
+    url: http://swagger.io
+paths:
+  /datatype:
+    get:
+      tags:
+      - datatype
+      summary: Get a list of available data types
+      operationId: list_data_types
+      responses:
+        200:
+          description: List of available data types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataType'
+  /datatype/{data_type_name}:
+    get:
+      tags:
+      - datatype
+      summary: Get information about a specific data type
+      operationId: get_data_type_info
+      parameters:
+      - name: data_type_name
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: Metadata about a particular data type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataType'
+  /job:
+    post:
+      tags:
+      - job
+      summary: Add a new job for computation
+      operationId: post_job
+      requestBody:
+        description: Job configuration for computations
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Job'
+        required: true
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
+  /job/{job_id}:
+    get:
+      tags:
+      - job
+      summary: Get job metadata
+      operationId: get_job_metadata
+      parameters:
+      - name: job_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: Metadata about a job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobMeta'
+  /job/{job_id}/download:
+    get:
+      tags:
+      - job
+      summary: Get job outputs
+      operationId: get_job_download
+      parameters:
+      - name: job_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: Job output download
+          content: {}
+  /job/{job_id}/report:
+    get:
+      tags:
+      - job
+      summary: Get a report of a computed job
+      operationId: get_job_report
+      parameters:
+      - name: job_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: Job computation report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobReport'
+  /jobconfig:
+    post:
+      tags:
+      - job
+      summary: Get a job configuration for computation and update its status
+      operationId: get_job_config
+      responses:
+        201:
+          description: Job configuration for computation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+  /jobconfig/{job_id}:
+    put:
+      tags:
+      - job
+      summary: Update job status
+      operationId: update_job_status
+      parameters:
+      - name: job_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: status
+        in: query
+        schema:
+          type: integer
+        required: true
+      responses:
+        201:
+          description: Job update response
+          content: {}
+  /task:
+    get:
+      tags:
+      - task
+      summary: Get a list of available tasks
+      operationId: list_task_types
+      responses:
+        200:
+          description: List of available tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskInfo'
+  /task/{task_name}:
+    get:
+      tags:
+      - task
+      summary: Get information about a specific task type
+      operationId: get_task_info
+      parameters:
+      - name: task_name
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: Metadata about a particular task type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskInfo'
+  /upload/{name}:
+    put:
+      tags:
+      - upload
+      summary: PUT an uploaded file for use in workflows
+      operationId: upload_file
+      parameters:
+      - name: name
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: datatype
+        in: query
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content: {}
+      responses:
+        201:
+          description: Uploaded file
+          content: {}
+components:
+  schemas:
+    DataType:
+      type: object
+      properties:
+        mime_type:
+          type: string
+    Job:
+      type: object
+      properties:
+        email:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskConfig'
+    JobMeta:
+      type: object
+      properties:
+        job_id:
+          type: string
+        download_url:
+          type: string
+        status:
+          type: integer
+        create_time:
+          type: string
+        update_time:
+          type: string
+        expiration_time:
+          type: string
+    JobReport:
+      type: object
+    TaskConfig:
+      type: object
+      properties:
+        task_id:
+          type: string
+    TaskInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        inputs:
+          type: array
+          items:
+            type: object
