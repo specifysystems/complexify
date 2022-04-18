@@ -46,7 +46,7 @@ repos:
     hooks:
       - id: regex-blacklist
         args:
-          - pre-commit-config/regex-blacklist.txt
+          - .github/linters/regex-blacklist.txt
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
