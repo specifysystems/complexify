@@ -1,0 +1,36 @@
+{
+    "identifier": "build_shapegrid",
+	"inputs": {
+        "min_x": {
+            "data_type": "NumberDataType",
+            "required": True
+        },
+        "min_y": {
+            "data_type": "NumberDataType",
+            "required": True
+        },
+        "max_x": {
+            "data_type": "NumberDataType",
+            "required": True
+        },
+        "max_y": {
+            "data_type": "NumberDataType",
+            "required": True
+        },
+        "cell_size": {
+            "data_type": "NumberDataType",
+            "required": True
+        },
+        "epsg": {
+            "data_type": "IntegerDataType",
+            "required": True
+        }
+    },
+    "outputs": {
+        "shapegrid": {
+            "data_type": "ShapefileDataType",
+			"extensions": [".shp"]
+        }
+    },
+	"command": "build_shapegrid {shapegrid} {min_x} {min_y} {max_x} {max_y} {cell_size} {epsg}"
+}

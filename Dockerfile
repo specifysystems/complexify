@@ -10,7 +10,27 @@ RUN conda update -n base -c conda-forge conda
 # .....................................................................................
 # Web server
 # .....................................................................................
-# Database
+FROM ubuntu:latest as complexify_api
+
+RUN apt-get update && apt-get install -y python3 python3-pip
+
+# Copy web requirements
+COPY ./web-requirements.txt /app/requirements.txt
+COPY ./complexify/common /app/complexify/common
+COPY ./complexify/web /app/complexify/web
+COPY ./app.py /app/app.py
+
+EXPOSE 5000
+
+WORKDIR /app
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+
+RUN pip install -r /app/requirements.txt
+
+ENTRYPOINT [ "python3" ]
+CMD [ "/app/complexify/web/app.py" ]
+
+
 # .....................................................................................
 # Contoller?
 # .....................................................................................

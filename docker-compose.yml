@@ -1,14 +1,41 @@
 version: "3.9"
 services:
+  complexify_api:
+    build:
+      context: ./.
+      target: complexify_api
+    #networks:
+    #  - complexify_public
+    ports:
+      - "5000:5000"
+    #command: [ "python", "/app/complexify/web/routes.py" ]
+    restart: unless-stopped
   catalog_server:
     build:
       context: ./.
       target: cat_server
     ports:
       - "9097:9097"
+    #networks:
+    #  - workflow
+    restart: unless-stopped
     command: ["catalog_server", "-p", "9097"]
   worker:
     build:
       context: ./.
       target: worker
+    #networks:
+    #  - workflow
+    restart: unless-stopped
     command: ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=catalog_server:9097"]
+
+#networks:
+#  workflow:
+#  jobconfigs:
+
+volumes:
+  #jobdata:
+  #config_files:
+  #user_data:
+  #lmdata:
+  db:  # Contains the sqlite3 database for job configurations.
