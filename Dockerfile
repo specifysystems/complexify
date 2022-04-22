@@ -12,13 +12,13 @@ RUN conda update -n base -c conda-forge conda
 # .....................................................................................
 FROM ubuntu:latest as complexify_api
 
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apt-get update && apt-get install -y python3 python3-pip sqlite3
 
 # Copy web requirements
 COPY ./web-requirements.txt /app/requirements.txt
 COPY ./complexify/common /app/complexify/common
 COPY ./complexify/web /app/complexify/web
-COPY ./app.py /app/app.py
+COPY ./complexify/task_definitions /app/task_definitions
 
 EXPOSE 5000
 

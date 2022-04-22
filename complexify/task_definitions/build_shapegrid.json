@@ -3,27 +3,27 @@
 	"inputs": {
         "min_x": {
             "data_type": "NumberDataType",
-            "required": True
+            "required": true
         },
         "min_y": {
             "data_type": "NumberDataType",
-            "required": True
+            "required": true
         },
         "max_x": {
             "data_type": "NumberDataType",
-            "required": True
+            "required": true
         },
         "max_y": {
             "data_type": "NumberDataType",
-            "required": True
+            "required": true
         },
         "cell_size": {
             "data_type": "NumberDataType",
-            "required": True
+            "required": true
         },
         "epsg": {
             "data_type": "IntegerDataType",
-            "required": True
+            "required": true
         }
     },
     "outputs": {

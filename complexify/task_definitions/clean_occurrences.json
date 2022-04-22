@@ -3,29 +3,26 @@
 	"inputs": {
 		"species_key": {
 			"data_type": "StringDataType",
-			"required": False,
+			"required": false,
 			"prefix": "-sp "
 		},
 		"x_key": {
 			"data_type": "StringDataType",
-			"required": False,
+			"required": false,
 			"prefix": "-x "
 		},
         "y_key": {
 			"data_type": "StringDataType",
-			"required": False,
+			"required": false,
 			"prefix": "-y "
-		},
-		"report_filename": {
-            "data_type": "StringDataType"
 		},
 		"reader": {
 			"data_type": "FileDataType",
-			"required": True
+			"required": true
 		},
 		"wrangler_configuration": {
 			"data_type": "FileDataType",
-			"required": True
+			"required": true
 		}
     },
     "outputs": {

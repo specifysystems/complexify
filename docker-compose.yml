@@ -8,8 +8,10 @@ services:
     #  - complexify_public
     ports:
       - "5000:5000"
-    #command: [ "python", "/app/complexify/web/routes.py" ]
+    #command: [ "python3", "/app/complexify/web/app.py" ]
     restart: unless-stopped
+    volumes:
+      - db:/db/
   catalog_server:
     build:
       context: ./.
