@@ -32,9 +32,24 @@ CMD [ "/app/complexify/web/app.py" ]
 
 
 # .....................................................................................
-# Contoller?
-# .....................................................................................
-# Makeflow
+# Job Flow container - Wrapped makeflows
+
+FROM conda_base as job_flow
+
+RUN conda update -n base -c conda-forge conda && \
+    conda install -y -c conda-forge ndcctools
+
+COPY ./job_flow-requirements.txt /app/requirements.txt
+COPY ./complexify/common /app/complexify/common
+COPY ./complexify/job_flow /app/complexify/job_flow
+
+WORKDIR /app
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+
+RUN pip install -r /app/requirements.txt
+
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT ["python", "/app/complexify/job_flow/daemon.py"]
 
 # .....................................................................................
 # Catalog Server
@@ -42,7 +57,9 @@ CMD [ "/app/complexify/web/app.py" ]
 
 FROM conda_base as cat_server
 
-RUN conda install -y -c conda-forge ndcctools
+RUN conda update -n base -c conda-forge conda && \
+    conda install -y -c conda-forge ndcctools
+
 SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["catalog_server", "-p", "9097"]
 

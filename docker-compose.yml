@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+
   complexify_api:
     build:
       context: ./.
@@ -12,6 +13,12 @@ services:
     restart: unless-stopped
     volumes:
       - db:/db/
+
+  job_flow:
+    build:
+      context: ./.
+      target: job_flow
+
   catalog_server:
     build:
       context: ./.
@@ -22,6 +29,7 @@ services:
     #  - workflow
     restart: unless-stopped
     command: ["catalog_server", "-p", "9097"]
+
   worker:
     build:
       context: ./.
