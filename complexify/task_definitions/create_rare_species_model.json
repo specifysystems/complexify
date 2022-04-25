@@ -1,0 +1,60 @@
+{
+    "identifier": "create_rare_species_model",
+    "inputs": [
+        {
+            "name": "species_column",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-sp "
+        },
+        {
+            "name": "x_column",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-x "
+        },
+        {
+            "name": "y_column",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-y "
+        },
+        {
+            "name": "burn_value",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-b "
+        },
+        {
+            "name": "nodata_value",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-n "
+        },
+        {
+            "name": "output_format",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-of ",
+			"choices": ["auto", "AAIGrid", "GTiff"]
+        },
+        {
+            "name": "point_csv_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "ecoregions_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "model_raster_filename",
+            "data_type": "FileDataType",
+            "required": true
+        }
+    ],
+    "command": "create_rare_species_model {options} {point_csv_filename.name} {ecoregions_filename.name} {model_raster_filename.name}"
+}

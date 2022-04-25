@@ -1,0 +1,18 @@
+{
+    "identifier": "randomize_pam",
+    "inputs": [
+        {
+            "name": "input_pam_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "output_pam_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "command": "randomize_pam {input_pam_filename.name} {output_pam_filename.name}"
+}

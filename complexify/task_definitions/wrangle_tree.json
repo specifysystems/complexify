@@ -1,0 +1,39 @@
+{
+    "identifier": "wrangle_tree",
+    "inputs": [
+        {
+            "name": "report_filename",
+            "data_type": "FileDataType",
+            "required": false,
+            "prefix": "-r "
+        },
+        {
+            "name": "tree_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "tree_schema",
+            "data_type": "StringDataType",
+            "required": true,
+        },
+        {
+            "name": "wrangler_configuration_file",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_tree_filename",
+            "data_type": "FileDataType",
+            "required": true
+        },
+        {
+            "name": "out_tree_schema",
+            "data_type": "StringDataType",
+            "required": true
+        }
+    ],
+    "command": "wrangle_matrix {options} {tree_filename.name} {tree_schema} {wrangler_configuration_file.name} {out_tree_filename.name} {out_tree_schema}"
+}

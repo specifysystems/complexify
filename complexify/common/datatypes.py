@@ -22,5 +22,34 @@ ALL_DATA_TYPES = {
     },
     'NumberDataType': {
         'identifier': 'NumberDataType'
+    },
+    'ShapefileDataType': {
+        'identifier': 'ShapefileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'FileDataType': {
+        'identifier': 'FileDataType',
+    },
+    'StringDataType': {
+        'identifier': 'StringDataType'
+    },
+    'DwcaFileDataType': {
+        'identifier': 'DwcaFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'WranglerFileDataType': {
+        'identifier': 'WranglerFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'PointCsvFileDataType': {
+        'identifier': 'PointCsvFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'DirectoryDataType': {
+        'identifier': 'DirectoryDataType'
+    },
+    'RasterFileDataType': {
+        'identifier': 'RasterDataType',
+        'parent_type': ['FileDataType']
     }
 }

@@ -1,0 +1,35 @@
+{
+    "identifier": "phylo_beta_diversity",
+    "inputs": [
+        {
+            "name": "in_tree_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "data_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "data_format",
+            "data_type": "StringDataType",
+            "required": true,
+			"choices": ["csv", "json", "phylip", "table"]
+        },
+        {
+            "name": "family_name",
+            "data_type": "StringDataType",
+            "required": true,
+			"choices": ["sorensen", "jaccard"]
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_foldername",
+            "data_type": "DirectoryDataType",
+            "required": true,
+        },
+    ],
+    "command": "phylo_beta_diversity {in_tree_filename.name} {data_filename.name} {data_format} {family_name} {out_foldername.name}"
+}

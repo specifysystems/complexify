@@ -1,0 +1,29 @@
+{
+    "identifier": "wrangle_matrix",
+    "inputs": [
+        {
+            "name": "report_filename",
+            "data_type": "FileDataType",
+            "required": false,
+            "prefix": "-r "
+        },
+        {
+            "name": "in_matrix_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "wrangler_configuration_file",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_matrix_filename",
+            "data_type": "FileDataType",
+            "required": true
+        }
+    ],
+    "command": "wrangle_matrix {options} {in_matrix_filename.name} {wrangler_configuration_file.name} {out_matrix_filename.name}"
+}

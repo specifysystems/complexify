@@ -1,0 +1,82 @@
+{
+    "identifier": "split_occurrence_data",
+    "inputs": [
+        {
+            "name": "max_open_writers",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-m "
+        },
+        {
+            "name": "key_field",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-k "
+        },
+        {
+            "name": "out_field",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-of "
+        },
+        {
+            "name": "dwca",
+            "data_type": "ComplexDataType",
+			"sub_types": [
+                {
+                    "name": "dwca_filename",
+                    "data_type": "DwcaFileDataType",
+                    "required": true,
+                },
+                {
+                    "name": "wrangler_configuration_filename",
+                    "data_type": "WranglerFileDataType",
+                    "required": true,
+                },
+            ],
+            "required": false,
+            "prefix": "--dwca {dwca_filename.name} {wrangler_configuration_filename.name}"
+        },
+        {
+            "name": "csv",
+            "data_type": "ComplexDataType",
+			"sub_types": [
+                {
+                    "name": "csv_filename",
+                    "data_type": "PointCsvFileDataType",
+                    "required": true,
+                },
+                {
+                    "name": "wrangler_configuration_filename",
+                    "data_type": "WranglerFileDataType",
+                    "required": true,
+                },
+                {
+                    "name": "species_key",
+                    "data_type": "StringDataType",
+                    "required": true,
+                },
+                {
+                    "name": "x_key",
+                    "data_type": "StringDataType",
+                    "required": true,
+                },
+                {
+                    "name": "y_key",
+                    "data_type": "StringDataType",
+                    "required": true,
+                },
+            ],
+            "required": false,
+            "prefix": "--csv {csv_filename.name} {wrangler_configuration_filename.name} {species_key} {x_key} {y_key}"
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_dir",
+            "data_type": "DirectoryDataType",
+            "required": true,
+        }
+    ],
+    "command": "split_occurrence_data {options} {out_dir.name}"
+}
