@@ -1,0 +1,59 @@
+{
+    "identifier": "ancestral_distribution",
+    "inputs": [
+        {
+            "name": "annotate_labels",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-l "
+        },
+        {
+            "name": "plot_directory",
+            "data_type": "DirectoryDataType",
+            "required": false,
+            "prefix": "-p "
+        },
+        {
+            "name": "out_csv_filename",
+            "data_type": "FileDataType",
+            "required": false,
+            "prefix": "-c "
+        },
+        {
+            "name": "in_tree_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "in_tree_schema",
+            "data_type": "StringDataType",
+            "required": true,
+			"choices": ["newick", "nexml", "nexus"]
+        },
+        {
+            "name": "data_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "data_format",
+            "data_type": "StringDataType",
+            "required": true,
+			"choices": ["csv", "json", "phylip", "table"]
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_tree_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+        {
+            "name": "out_tree_schema",
+            "data_type": "StringDataType",
+            "required": true,
+			"choices": ["newick", "nexml", "nexus"]
+        },
+    ],
+    "command": "ancestral_distribution {options} {in_tree_filename.name} {in_tree_schema} {data_filename.name} {data_format} {out_tree_filename.name} {out_tree_schema}"
+}
