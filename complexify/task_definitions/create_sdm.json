@@ -1,0 +1,81 @@
+{
+    "identifier": "create_sdm",
+    "inputs": [
+        {
+            "name": "min_points",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-m "
+        },
+        {
+            "name": "mask",
+            "data_type": "RasterDataType",
+            "required": false,
+            "prefix": "-m "
+        },
+        {
+            "name": "maxent_params",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "-p "
+        },
+        {
+            "name": "species_key",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "--species_key="
+        },
+        {
+            "name": "x_key",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "--x_key="
+        },
+        {
+            "name": "y_key",
+            "data_type": "StringDataType",
+            "required": false,
+            "prefix": "--y_key="
+        },
+        {
+            "name": "report_filename",
+            "data_type": "FileDataType",
+            "required": false,
+            "prefix": "-r "
+        },
+        {
+            "name": "package_filename",
+            "data_type": "FileDataType",
+            "required": false,
+            "prefix": "-z "
+        },
+        {
+            "name": "points_filename",
+            "data_type": "PointCsvFileDataType",
+            "required": true,
+        },
+        {
+            "name": "env_dir",
+            "data_type": "DirectoryDataType",
+            "required": true,
+        },
+        {
+            "name": "ecoregions_filename",
+            "data_type": "RasterFileDataType",
+            "required": true,
+        },
+         {
+            "name": "work_dir",
+            "data_type": "DirectoryDataType",
+            "required": true,
+        },
+   ],
+    "outputs": [
+        {
+            "name": "model_raster_filename",
+            "data_type": "RasterFileDataType",
+            "required": true,
+        },
+    ],
+    "command": "create_sdm {options} {points_filename.name} {env_dir.name} {ecoregions_filename.name} {work_dir.name} {model_raster_filename.name}"
+}

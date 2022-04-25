@@ -47,5 +47,9 @@ ALL_DATA_TYPES = {
     },
     'DirectoryDataType': {
         'identifier': 'DirectoryDataType'
+    },
+    'RasterFileDataType': {
+        'identifier': 'RasterDataType',
+        'parent_type': ['FileDataType']
     }
 }
