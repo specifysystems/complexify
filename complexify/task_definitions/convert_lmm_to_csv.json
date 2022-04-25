@@ -1,0 +1,18 @@
+{
+    "identifier": "convert_lmm_to_csv",
+    "inputs": [
+        {
+            "name": "in_lmm_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_csv_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "command": "convert_csv_to_lmm {options} {in_lmm_filename.name} {out_csv_filename.name}"
+}

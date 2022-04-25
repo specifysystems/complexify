@@ -1,0 +1,30 @@
+{
+    "identifier": "convert_csv_to_lmm",
+    "inputs": [
+        {
+            "name": "header_rows",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-r "
+        },
+        {
+            "name": "header_cols",
+            "data_type": "IntegerDataType",
+            "required": false,
+            "prefix": "-c "
+        },
+        {
+            "name": "in_csv_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "outputs": [
+        {
+            "name": "out_lmm_filename",
+            "data_type": "FileDataType",
+            "required": true,
+        },
+    ],
+    "command": "convert_csv_to_lmm {options} {in_csv_filename.name} {out_lmm_filename.name}"
+}
