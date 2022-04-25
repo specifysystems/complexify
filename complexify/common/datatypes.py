@@ -32,5 +32,20 @@ ALL_DATA_TYPES = {
     },
     'StringDataType': {
         'identifier': 'StringDataType'
+    },
+    'DwcaFileDataType': {
+        'identifier': 'DwcaFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'WranglerFileDataType': {
+        'identifier': 'WranglerFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'PointCsvFileDataType': {
+        'identifier': 'PointCsvFileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'DirectoryDataType': {
+        'identifier': 'DirectoryDataType'
     }
 }

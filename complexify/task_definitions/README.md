@@ -27,6 +27,10 @@ properties:
           type: string
         data_type:
           type: string
+		sub_types:
+		  type: array
+		choices:
+		  type: array
   output:
     type: array
     items:
@@ -40,6 +44,10 @@ properties:
           type: string
         data_type:
           type: string
+		sub_types:
+		  type: array
+		choices:
+		  type: array
   command:
     type: string
 ```
