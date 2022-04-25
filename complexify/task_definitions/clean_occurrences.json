@@ -1,34 +1,40 @@
 {
     "identifier": "clean_occurrences",
-	"inputs": {
-		"species_key": {
+	"inputs": [
+        {
+		    "name": "species_key",
 			"data_type": "StringDataType",
 			"required": false,
 			"prefix": "-sp "
 		},
-		"x_key": {
+        {
+		    "name": "x_key",
 			"data_type": "StringDataType",
 			"required": false,
 			"prefix": "-x "
 		},
-        "y_key": {
+        {
+		    "name": "y_key",
 			"data_type": "StringDataType",
 			"required": false,
 			"prefix": "-y "
 		},
-		"reader": {
+        {
+		    "name": "reader",
 			"data_type": "FileDataType",
 			"required": true
 		},
-		"wrangler_configuration": {
+        {
+		    "name": "wrangler_configuration",
 			"data_type": "FileDataType",
 			"required": true
 		}
-    },
-    "outputs": {
-		"writer": {
+    ],
+    "outputs": [
+	    {
+		    "name": "writer",
 			"data_type": "FileDataType"
 		}
-    },
+    ],
 	"command": "clean_occurrences {options} {reader.name} {writer.name} {wrangler_configuration.name}"
 }

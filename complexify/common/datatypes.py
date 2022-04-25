@@ -22,5 +22,15 @@ ALL_DATA_TYPES = {
     },
     'NumberDataType': {
         'identifier': 'NumberDataType'
+    },
+    'ShapefileDataType': {
+        'identifier': 'ShapefileDataType',
+        'parent_type': ['FileDataType']
+    },
+    'FileDataType': {
+        'identifier': 'FileDataType',
+    },
+    'StringDataType': {
+        'identifier': 'StringDataType'
     }
 }
