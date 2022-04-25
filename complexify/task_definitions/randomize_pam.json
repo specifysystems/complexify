@@ -1,18 +1,18 @@
 {
-    "identifier": "convert_lmm_to_csv",
+    "identifier": "randomize_pam",
     "inputs": [
         {
-            "name": "in_lmm_filename",
+            "name": "input_pam_filename",
             "data_type": "FileDataType",
             "required": true,
         },
     ],
     "outputs": [
         {
-            "name": "out_csv_filename",
+            "name": "output_pam_filename",
             "data_type": "FileDataType",
             "required": true,
         },
     ],
-    "command": "convert_csv_to_lmm {in_lmm_filename.name} {out_csv_filename.name}"
+    "command": "randomize_pam {input_pam_filename.name} {output_pam_filename.name}"
 }
