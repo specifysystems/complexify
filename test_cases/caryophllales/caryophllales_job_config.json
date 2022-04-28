@@ -1,0 +1,63 @@
+{
+    "steps": [
+		{
+			"task": "wrangle_species_list",
+			"identifier": "wrangle_species",
+			"parameters": {
+				"species_list_filename": "$uploads:sp_caryo.txt"
+			}
+		},
+	    {
+			"task": "split_occurrence_data",
+			"identifier": "split_occurrences",
+			"parameters": {
+				"dwca": {
+					"dwca_filename": "$uploads:gbif_dwca.zip",
+					"wrangler_configuration_filename": "$uploads:gbif_wrangler.json"
+				},
+				"csv": [
+                    {
+						"csv_filename": "$uploads:ala_caryo.csv",
+						"wrangler_configuration_filename": "$uploads:ala_wrangler.json",
+						"species_key": "species",
+						"x_key": "decimallongitude",
+						"y_key": "decimallatitude"
+					},
+                    {
+						"csv_filename": "$uploads:idigbio_caryo.csv",
+						"wrangler_configuration_filename": "$uploads:idigbio_wrangler.json",
+						"species_key": "species",
+						"x_key": "decimallongitude",
+						"y_key": "decimallatitude"
+					},
+                    {
+						"csv_filename": "$uploads:RAINBIO.csv",
+						"wrangler_configuration_filename": "$uploads:rainbio_wrangler.json",
+						"species_key": "species",
+						"x_key": "decimallongitude",
+						"y_key": "decimallatitude"
+					},
+				]
+			}
+		},
+		{
+			"task": "clean_occurrences",
+			"identifier": "clean_species_occurrences",
+			"parameters": {
+				"reader": "#split_occurrences.each:out_dir",
+				"wrangler_configuration": "$uploads:clean_species_occurrences_wrangler.json"
+			}
+		},
+		{
+			"task": "create_sdm",
+			"identifier": "create_species_sdm",
+			"parameters": {
+				"min_points": 12,
+				"points_filename": "#id:clean_occurrences.writer",
+				"env_dir": "$uploads:env_dir",
+				"ecoregions_filename": "$uploads:ecoregions.asc",
+				"work_dir": "./work"
+			}
+		},
+	]
+}
