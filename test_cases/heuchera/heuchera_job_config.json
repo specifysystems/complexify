@@ -1,0 +1,186 @@
+{
+    "steps": [
+	    {
+			"task": "split_occurrence_data",
+			"identifier": "split_occurrences",
+			"parameters": {
+				"csv": {
+					"csv_filename": "$uploads:heuchera.csv",
+					"wrangler_configuration_filename": "$uploads:bulk_occurrences_wrangler.json",
+					"species_key": "species",
+					"x_key": "decimallongitude",
+					"y_key": "decimallatitude"
+				}
+			}
+		},
+		{
+			"task": "clean_occurrences",
+			"identifier": "clean_species_occurrences",
+			"parameters": {
+				"reader": "#split_occurrences.each:out_dir",
+				"wrangler_configuration": "$uploads:clean_species_occurrences_wrangler.json"
+			}
+		},
+		{
+			"task": "create_sdm",
+			"identifier": "create_species_sdm",
+			"parameters": {
+				"min_points": 12,
+				"points_filename": "#id:clean_occurrences.writer",
+				"env_dir": "$uploads:env_dir",
+				"ecoregions_filename": "$uploads:ecoregions.asc",
+				"work_dir": "./work"
+			}
+		},
+		{
+			"task": "build_shapegrid",
+			"identifier": "build_grid",
+			"parameters": {
+				"min_x": -180.0,
+				"max_x": 180.0,
+				"min_y": -90.0,
+				"max_y": 90.0,
+				"cell_size": 0.5,
+				"epsg": 4326
+			}
+		},
+		{
+			"task": "encode_layers",
+			"identifier": "create_pam",
+			"parameters": {
+				"encode_method": "presence_absence",
+				"min_coverage": 10.0,
+				"min_presence": 1.0,
+				"max_presence": 100.0,
+				"shapegrid_filename": "#id:build_grid.shapegrid",
+				"layer": "#create_sdm.all:model_raster_filename"
+			}
+		},
+		{
+			"task": "wrangle_tree",
+			"identifier": "wrangled_tree",
+			"parameters": {
+				"tree_filename": "$uploads:heuchera.nex",
+				"tree_schema": "nexus",
+				"wrangler_configuration_file": "$uploads:tree_wrangler.json"
+			}
+		},
+		{
+			"task": "wrangle_matrix",
+			"identifier": "wrangled_pam",
+			"parameters": {
+				"in_matrix_filename": "#create_pam:out_matrix_filename",
+				"wrangler_configuration_file": "$uploads:pam_wrangler.json"
+			}
+		},
+		{
+			"task": "create_tree_matrix",
+			"identifier": "tree_matrix",
+			"parameters": {
+				"tree_filename": "#wrangled_tree.out_tree_filename",
+				"tree_schema": "#wrangled_tree.out_tree_schema"
+			}
+		},
+		{
+			"task": "compute_pam_stats",
+			"identifier": "create_pam_stats",
+			"parameters": {
+				"pam_filename": "#wrangled_pam:out_matrix_filename",
+				"tree_matrix_filename": "#tree_matrix:out_tree_matrix_filename",
+				"tree_node_heights_filename": "#tree_matrix:out_node_heights_filename",
+				"tree_tip_lengths_filename": "#tree_matrix:out_tip_lengths_filename"
+			}
+		},
+		{
+			"task": "encode_mcpa_tree",
+			"identifier": "mcpa_tree",
+			"parameters": {
+				"tree_filename": "#wrangled_tree.out_tree_filename",
+				"tree_schema": "#wrangled_tree.out_tree_schema"
+			}
+		},
+		{
+			"task": "encode_layers",
+			"identifier": "env_matrix",
+			"parameters": {
+				"encode_method": "mean_value",
+				"min_coverage": 10.0,
+				"shapegrid_filename": "#id:build_grid.shapegrid",
+				"layer": "$uploads:environment/alt.tif",
+				"layer": "$uploads:environment/bio1.tif",
+				"layer": "$uploads:environment/bio2.tif",
+				"layer": "$uploads:environment/bio3.tif",
+				"layer": "$uploads:environment/bio4.tif",
+				"layer": "$uploads:environment/bio5.tif",
+				"layer": "$uploads:environment/bio6.tif",
+				"layer": "$uploads:environment/bio7.tif",
+				"layer": "$uploads:environment/bio8.tif",
+				"layer": "$uploads:environment/bio9.tif",
+				"layer": "$uploads:environment/bio10.tif",
+				"layer": "$uploads:environment/bio11.tif",
+				"layer": "$uploads:environment/bio12.tif",
+				"layer": "$uploads:environment/bio13.tif",
+				"layer": "$uploads:environment/bio14.tif",
+				"layer": "$uploads:environment/bio15.tif",
+				"layer": "$uploads:environment/bio16.tif",
+				"layer": "$uploads:environment/bio17.tif",
+				"layer": "$uploads:environment/bio18.tif",
+				"layer": "$uploads:environment/bio19.tif",
+			}
+		},
+		{
+			"task": "encode_layers",
+			"identifier": "bg_matrix",
+			"parameters": {
+				"encode_method": "biogeo",
+				"min_coverage": 10.0,
+				"shapegrid_filename": "#id:build_grid.shapegrid",
+				"layer": "$uploads:hypotheses/Continental_Divide.shp",
+				"layer": "$uploads:hypotheses/Eastern_Divide.shp",
+				"layer": "$uploads:hypotheses/Eastern_NA_and_Plains.shp",
+				"layer": "$uploads:hypotheses/Great_Basin.shp",
+				"layer": "$uploads:hypotheses/Gulf_of_California_Xeric_scrub.shp",
+				"layer": "$uploads:hypotheses/Last_Glacial_Maximum.shp",
+				"layer": "$uploads:hypotheses/Mississippi_River.shp",
+				"layer": "$uploads:hypotheses/Rocky_Mountains.shp",
+				"layer": "$uploads:hypotheses/Sierra_Madre_Oriental_Pine-Oak_Forests.shp",
+			}
+		},
+		{
+			"task": "mcpa_single_run",
+			"identifier": "mcpa_observed",
+			"parameters": {
+				"environment_matrix": "#env_matrix:out_matrix_filename",
+				"biogeo_matrix": "#bg_matrix:out_matrix_filename",
+				"incidence_matrix": "#wrangled_pam:out_matrix_filename",
+				"tree_matrix": "#mcpa_tree:tree_matrix"
+			}
+		},
+		{
+			"task": "randomize_pam",
+			"identifier": "random_pam",
+			"iterations": 10000,
+			"parameters": {
+				"pam_filename": "#wrangled_pam:out_matrix_filename"
+			}
+		},
+		{
+			"task": "mcpa_single_run",
+			"identifier": "mcpa_random",
+			"parameters": {
+				"environment_matrix": "#env_matrix:out_matrix_filename",
+				"biogeo_matrix": "#bg_matrix:out_matrix_filename",
+				"incidence_matrix": "#random_pam.each:out_matrix_filename",
+				"tree_matrix": "#mcpa_tree:tree_matrix"
+			}
+		},
+		{
+			"task": "mcpa_aggregate",
+			"identifier": "aggregate_mcpa",
+			"parameters": {
+				"observed": "#mcpa_observed:output_matrix",
+				"random": "#mcpa_random.all:output_matrix"
+			}
+		},
+	]
+}
