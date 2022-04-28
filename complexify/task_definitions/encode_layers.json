@@ -16,13 +16,13 @@
         },
         {
             "name": "min_presence",
-            "data_type": "StringDataType",
+            "data_type": "FloatDataType",
             "required": false,
             "prefix": "--min_presence="
         },
         {
             "name": "max_presence",
-            "data_type": "StringDataType",
+            "data_type": "FloatDataType",
             "required": false,
             "prefix": "--max_presence="
         },
@@ -33,7 +33,7 @@
         },
         {
             "name": "layer",
-            "data_type": "StringDataType",
+            "data_type": "RasterFileDataType",
             "required": true,
             "prefix": "-l ",
 			"nargs": "*"
