@@ -4,7 +4,7 @@
 			"task": "wrangle_species_list",
 			"identifier": "wrangle_species",
 			"parameters": {
-				"species_list_filename": "$uploads:sp_caryo.txt"
+				"species_list_filename": "$uploads:caryo_sp.txt"
 			}
 		},
 	    {
