@@ -17,7 +17,7 @@
 			"task": "clean_occurrences",
 			"identifier": "clean_species_occurrences",
 			"parameters": {
-				"reader": "#split_occurrences.each:out_dir",
+				"reader": "#split_occurrences@each:out_dir",
 				"wrangler_configuration": "$uploads:clean_species_occurrences_wrangler.json"
 			}
 		},
@@ -26,7 +26,7 @@
 			"identifier": "create_species_sdm",
 			"parameters": {
 				"min_points": 12,
-				"points_filename": "#id:clean_occurrences.writer",
+				"points_filename": "#clean_occurrences:writer",
 				"env_dir": "$uploads:env_dir",
 				"ecoregions_filename": "$uploads:ecoregions.asc",
 				"work_dir": "./work"
@@ -52,8 +52,8 @@
 				"min_coverage": 10.0,
 				"min_presence": 1.0,
 				"max_presence": 100.0,
-				"shapegrid_filename": "#id:build_grid.shapegrid",
-				"layer": "#create_sdm.all:model_raster_filename"
+				"shapegrid_filename": "#build_grid.shapegrid",
+				"layer": "#create_sdm@all:model_raster_filename"
 			}
 		},
 		{
@@ -105,7 +105,7 @@
 			"parameters": {
 				"encode_method": "mean_value",
 				"min_coverage": 10.0,
-				"shapegrid_filename": "#id:build_grid.shapegrid",
+				"shapegrid_filename": "#build_grid:shapegrid",
 				"layer": "$uploads:environment/alt.tif",
 				"layer": "$uploads:environment/bio1.tif",
 				"layer": "$uploads:environment/bio2.tif",
@@ -134,7 +134,7 @@
 			"parameters": {
 				"encode_method": "biogeo",
 				"min_coverage": 10.0,
-				"shapegrid_filename": "#id:build_grid.shapegrid",
+				"shapegrid_filename": "#build_grid:shapegrid",
 				"layer": "$uploads:hypotheses/Continental_Divide.shp",
 				"layer": "$uploads:hypotheses/Eastern_Divide.shp",
 				"layer": "$uploads:hypotheses/Eastern_NA_and_Plains.shp",
@@ -170,7 +170,7 @@
 			"parameters": {
 				"environment_matrix": "#env_matrix:out_matrix_filename",
 				"biogeo_matrix": "#bg_matrix:out_matrix_filename",
-				"incidence_matrix": "#random_pam.each:out_matrix_filename",
+				"incidence_matrix": "#random_pam@each:out_matrix_filename",
 				"tree_matrix": "#mcpa_tree:tree_matrix"
 			}
 		},

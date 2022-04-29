@@ -44,7 +44,7 @@
 			"task": "clean_occurrences",
 			"identifier": "clean_species_occurrences",
 			"parameters": {
-				"reader": "#split_occurrences.each:out_dir",
+				"reader": "#split_occurrences@each:out_dir",
 				"wrangler_configuration": "$uploads:clean_species_occurrences_wrangler.json"
 			}
 		},
@@ -53,11 +53,11 @@
 			"identifier": "create_species_sdm",
 			"parameters": {
 				"min_points": 12,
-				"points_filename": "#id:clean_occurrences.writer",
+				"points_filename": "#clean_occurrences:writer",
 				"env_dir": "$uploads:env_dir",
 				"ecoregions_filename": "$uploads:ecoregions.asc",
 				"work_dir": "./work"
 			}
-		},
+		}
 	]
 }
