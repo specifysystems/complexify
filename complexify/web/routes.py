@@ -84,7 +84,7 @@ def job_get_report(job_identifer):
 @bp.route('/job/<string:job_identifier>/status', methods=['GET'])
 def job_get_status(job_identifier):
     """Get job status."""
-    job = Job.from_identifier(job_identifer)
+    job = Job.from_identifier(job_identifier)
     return job.get_metadata()
 
 
@@ -92,7 +92,7 @@ def job_get_status(job_identifier):
 @bp.route('/job/<string:job_identifier>/status/<int:new_status>', methods=['PUT'])
 def job_set_status(job_identifier, new_status):
     """Set job status."""
-    job = Job.from_identifier(job_identifer)
+    job = Job.from_identifier(job_identifier)
     job.set_status(new_status)
     return job.get_metadata()
 
