@@ -18,6 +18,10 @@ services:
     build:
       context: ./.
       target: job_flow
+    ports:
+      - "1024:1024"
+    volumes:
+      - ./demo/:/demo/
 
   catalog_server:
     build:
@@ -37,7 +41,8 @@ services:
     #networks:
     #  - workflow
     restart: unless-stopped
-    command: ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=catalog_server:9097"]
+    command: ["work_queue_factory", "-T", "local", "-M", "lm.\\*", "--debug=all", "--catalog=catalog_server:9097"]
+    #command: ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=catalog_server:9097"]
 
 #networks:
 #  workflow:

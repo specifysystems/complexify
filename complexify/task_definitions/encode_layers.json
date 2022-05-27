@@ -29,7 +29,7 @@
         {
             "name": "shapegrid_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "layer",
@@ -37,14 +37,14 @@
             "required": true,
             "prefix": "-l ",
 			"nargs": "*"
-        },
+        }
     ],
     "outputs": [
         {
             "name": "out_matrix_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "command": "encode_layers {options} {out_matrix_filename.name}"
 }

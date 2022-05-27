@@ -41,13 +41,13 @@
         {
             "name": "point_csv_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "ecoregions_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "outputs": [
         {

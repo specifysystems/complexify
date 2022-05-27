@@ -4,30 +4,30 @@
         {
             "name": "tree_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "tree_schema",
             "data_type": "StringDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "outputs": [
         {
             "name": "out_tree_matrix_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "out_node_heights_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "out_tip_lengths_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "command": "create_tree_matrix {tree_filename.name} {tree_schema} {out_tree_matrix_filename.name} {out_node_heights_filename.name} {out_tip_lengths_filename.name}"
 }

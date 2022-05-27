@@ -4,15 +4,15 @@
         {
             "name": "input_pam_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "outputs": [
         {
             "name": "output_pam_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "command": "randomize_pam {input_pam_filename.name} {output_pam_filename.name}"
 }

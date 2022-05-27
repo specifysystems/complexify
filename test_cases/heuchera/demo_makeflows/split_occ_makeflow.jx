@@ -1,0 +1,9 @@
+{
+    "rules": [
+        {
+            "command" : "split_occurrence_data --species_list_filename=heuchera_species_list.txt --csv heuchera.csv heuchera_wranglers.json species decimallongitude decimallatitude species_occurrences/ ; zip species_records.zip -r species_occurrences/ ",
+            "outputs" : [ "heuchera_species_list.txt", "species_records.zip" ],
+            "inputs"  : [ "heuchera.csv", "heuchera_wranglers.json" ]
+        }
+    ]
+}

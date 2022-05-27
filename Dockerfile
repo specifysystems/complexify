@@ -37,7 +37,7 @@ CMD [ "/app/complexify/web/app.py" ]
 FROM conda_base as job_flow
 
 RUN conda update -n base -c conda-forge conda && \
-    conda install -y -c conda-forge ndcctools
+    conda install -y -c conda-forge ndcctools zip unzip
 
 COPY ./job_flow-requirements.txt /app/requirements.txt
 COPY ./complexify/common /app/complexify/common
@@ -70,7 +70,7 @@ ENTRYPOINT ["catalog_server", "-p", "9097"]
 FROM conda_base as worker
 
 RUN conda update -n base -c conda-forge conda && \
-    conda install -y -c conda-forge ndcctools tiledb=2.2.9 gdal libspatialindex rtree git openjdk=8
+    conda install -y -c conda-forge ndcctools tiledb=2.2.9 gdal libspatialindex rtree git zip openjdk=8
 
 ENV PROJ_LIB=/usr/local/share/proj/
 
@@ -97,4 +97,4 @@ ENV MAXENT_VERSION=3.4.4
 ENV MAXENT_JAR=/git/Maxent/ArchivedReleases/$MAXENT_VERSION/maxent.jar
 
 SHELL ["/bin/bash", "-c"]
-ENTRYPOINT ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=cat_server:9097"]
+ENTRYPOINT ["work_queue_factory", "-T", "local", "--debug=all", "-N", "lm.\\*", "--catalog=catalog_server:9097"]
