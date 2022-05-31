@@ -70,7 +70,7 @@ ENTRYPOINT ["catalog_server", "-p", "9097"]
 FROM conda_base as worker
 
 RUN conda update -n base -c conda-forge conda && \
-    conda install -y -c conda-forge ndcctools tiledb=2.2.9 gdal libspatialindex rtree git zip openjdk=8
+    conda install -y -c conda-forge ndcctools tiledb=2.2.9 gdal libspatialindex rtree git zip openjdk=8 font-ttf-dejavu-sans-mono
 
 ENV PROJ_LIB=/usr/local/share/proj/
 

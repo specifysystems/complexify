@@ -19,7 +19,8 @@ services:
       context: ./.
       target: job_flow
     ports:
-      - "1024:1024"
+      - "1000-1100:1000-1100"
+    # Mounted for demo testing, probably won't in production
     volumes:
       - ./demo/:/demo/
 
@@ -42,7 +43,9 @@ services:
     #  - workflow
     restart: unless-stopped
     command: ["work_queue_factory", "-T", "local", "-M", "lm.\\*", "--debug=all", "--catalog=catalog_server:9097"]
-    #command: ["work_queue_factory", "-T", "local", "-M", "lm*", "--catalog=catalog_server:9097"]
+    # I mount the demo directory if I need to test one of the tools installed directly
+    #volumes:
+    #  - ./demo/:/demo/
 
 #networks:
 #  workflow:
