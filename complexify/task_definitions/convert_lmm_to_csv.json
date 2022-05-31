@@ -4,15 +4,15 @@
         {
             "name": "in_lmm_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "outputs": [
         {
             "name": "out_csv_filename",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "command": "convert_csv_to_lmm {in_lmm_filename.name} {out_csv_filename.name}"
 }

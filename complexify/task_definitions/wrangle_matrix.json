@@ -10,13 +10,13 @@
         {
             "name": "in_matrix_filename",
             "data_type": "FileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "wrangler_configuration_file",
             "data_type": "FileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "outputs": [
         {

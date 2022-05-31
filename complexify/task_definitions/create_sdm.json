@@ -52,30 +52,30 @@
         {
             "name": "points_filename",
             "data_type": "PointCsvFileDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "env_dir",
             "data_type": "DirectoryDataType",
-            "required": true,
+            "required": true
         },
         {
             "name": "ecoregions_filename",
             "data_type": "RasterFileDataType",
-            "required": true,
+            "required": true
         },
          {
             "name": "work_dir",
             "data_type": "DirectoryDataType",
-            "required": true,
-        },
+            "required": true
+        }
    ],
     "outputs": [
         {
             "name": "model_raster_filename",
             "data_type": "RasterFileDataType",
-            "required": true,
-        },
+            "required": true
+        }
     ],
     "command": "create_sdm {options} {points_filename.name} {env_dir.name} {ecoregions_filename.name} {work_dir.name} {model_raster_filename.name}"
 }
