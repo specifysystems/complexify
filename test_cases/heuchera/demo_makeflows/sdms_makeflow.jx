@@ -1,4 +1,7 @@
 {
+    # Note: I haven't figured out how to use filenames with spaces yet.  I'm sure the
+    #     spaces can be escaped, but I haven't figured out how that needs to be done
+    #     yet.
     "define" : {
         "SPECIES": [
             "Heuchera_longipetala",
@@ -66,10 +69,18 @@
             "Heuchera_grossulariifolia",
             "Tiarella_polyphylla"
         ],
+        # Local (to workflow) directories to store files
         "ENV_DIR": "model_env_dir",
-        "SP_DIR": "species_dir"
+        "SP_DIR": "species_dir",
+        "MODEL_DIR": "models"
     },
     "rules" : [
+        {
+            "command": "mkdir " + MODEL_DIR + "; touch " + MODEL_DIR + "/model_dir.txt",
+            "inputs": [],
+            "outputs": [ MODEL_DIR + "/model_dir.txt" ],
+            "local_job": true
+        },
         {
             "command": "mkdir " + ENV_DIR + "; touch " + ENV_DIR + "/env_dir.txt",
             "inputs": [],
@@ -116,7 +127,7 @@
 			"local_job": true
 		} for SP in SPECIES,
         {
-            "command": "create_sdm -n 12 " + SP_DIR + "/" + SP + ".csv " + ENV_DIR + "/ ecoregions.tif " + SP + "/ " + SP_DIR + "/" + SP + "_model.asc",
+            "command": "create_sdm -n 12 " + SP_DIR + "/" + SP + ".csv " + ENV_DIR + "/ ecoregions.tif " + SP + "/ " + MODEL_DIR + "/" + SP + "_model.asc",
             "inputs": [
                 SP_DIR + "/" + SP + ".csv",
                 "ecoregions.tif",
@@ -141,7 +152,7 @@
                 ENV_DIR + "/bio18.asc",
                 ENV_DIR + "/bio19.asc"
             ],
-            "outputs": [ SP_DIR + "/" + SP + "_model.asc" ]
+            "outputs": [ MODEL_DIR + "/" + SP + "_model.asc" ]
         } for SP in SPECIES
     ]
 }

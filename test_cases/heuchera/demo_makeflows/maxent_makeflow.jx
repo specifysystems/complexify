@@ -1,0 +1,88 @@
+{
+    # This demo runs maxent directly instead of wrapping with lmtools
+    "define" : {
+        "SPECIES": [
+            "Tiarella_polyphylla",
+            "Mitella_pauciflora",
+            "Heuchera_bracteata",
+            "Heuchera_pulchella"
+        ],
+        "ENV_DIR": "model_env_dir",
+        "SP_DIR": "species_dir"
+    },
+    "rules" : [
+        {
+            "command": "mkdir " + ENV_DIR + "; touch " + ENV_DIR + "/env_dir.txt",
+            "inputs": [],
+            "outputs": [ ENV_DIR + "/env_dir.txt" ],
+            "local_job": true
+        },
+	    {
+		    "command": "cp environment/*.asc " + ENV_DIR + "/",
+			"inputs": [ ENV_DIR + "/env_dir.txt" ],
+			"outputs": [
+                ENV_DIR + "/alt.asc",
+                ENV_DIR + "/bio1.asc",
+                ENV_DIR + "/bio2.asc",
+                ENV_DIR + "/bio3.asc",
+                ENV_DIR + "/bio4.asc",
+                ENV_DIR + "/bio5.asc",
+                ENV_DIR + "/bio6.asc",
+                ENV_DIR + "/bio7.asc",
+                ENV_DIR + "/bio8.asc",
+                ENV_DIR + "/bio9.asc",
+                ENV_DIR + "/bio10.asc",
+                ENV_DIR + "/bio11.asc",
+                ENV_DIR + "/bio12.asc",
+                ENV_DIR + "/bio13.asc",
+                ENV_DIR + "/bio14.asc",
+                ENV_DIR + "/bio15.asc",
+                ENV_DIR + "/bio16.asc",
+                ENV_DIR + "/bio17.asc",
+                ENV_DIR + "/bio18.asc",
+                ENV_DIR + "/bio19.asc"
+			],
+			"local_job": true
+		},
+        {
+            "command": "mkdir " + SP_DIR + "; touch " + SP_DIR + "/sp_dir.txt",
+            "inputs": [],
+            "outputs": [ SP_DIR + "/sp_dir.txt" ],
+            "local_job": true
+        },
+	    {
+		    "command": "cp species_occurrences/" + SP + ".csv " + SP_DIR + "/",
+			"inputs": [ SP_DIR + "/sp_dir.txt" ],
+			"outputs": [ SP_DIR + "/" + SP + ".csv" ],
+			"local_job": true
+		} for SP in SPECIES,
+        {
+            "command": "java -cp /git/Maxent/ArchivedReleases/3.4.4/maxent.jar density.MaxEnt samplesfile=" + SP_DIR + "/" + SP + ".csv -e " + ENV_DIR + " -o ./ nowarnings nocache autorun -z",
+            "inputs": [
+                SP_DIR + "/" + SP + ".csv",
+                "ecoregions.tif",
+                ENV_DIR + "/alt.asc",
+                ENV_DIR + "/bio1.asc",
+                ENV_DIR + "/bio2.asc",
+                ENV_DIR + "/bio3.asc",
+                ENV_DIR + "/bio4.asc",
+                ENV_DIR + "/bio5.asc",
+                ENV_DIR + "/bio6.asc",
+                ENV_DIR + "/bio7.asc",
+                ENV_DIR + "/bio8.asc",
+                ENV_DIR + "/bio9.asc",
+                ENV_DIR + "/bio10.asc",
+                ENV_DIR + "/bio11.asc",
+                ENV_DIR + "/bio12.asc",
+                ENV_DIR + "/bio13.asc",
+                ENV_DIR + "/bio14.asc",
+                ENV_DIR + "/bio15.asc",
+                ENV_DIR + "/bio16.asc",
+                ENV_DIR + "/bio17.asc",
+                ENV_DIR + "/bio18.asc",
+                ENV_DIR + "/bio19.asc"
+            ],
+            "outputs": [ SP + ".asc" ]
+        } for SP in SPECIES
+    ]
+}

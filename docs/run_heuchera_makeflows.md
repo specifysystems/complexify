@@ -34,9 +34,14 @@ Again, from the `complexify` repository root.
 
 ### Unzip the species data and run SDMs makeflow
 
+Note: Currently need to replace spaces with underscores in species filenames
+
   ```commandline
   # cd /demo/
   # unzip species_records.zip
+  # cd species_occurrences/
+  # for file in *; do mv "$file" `echo $file | tr ' ' '_'` ; done
+  # cd ..
   # makeflow -C catalog_server:9097 -T wq -N lmheuchera-sdm -a --jx sdms_makeflow.jx
   ```
 
