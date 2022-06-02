@@ -15,7 +15,7 @@ cp -r ./test_cases/heuchera/uploads/* demo/
 Again, from the `complexify` repository root.
 
   ```commandline
-  docker-compose up
+  docker-compose up --scale worker=5
   ```
 
 ## Attach to the job flow container

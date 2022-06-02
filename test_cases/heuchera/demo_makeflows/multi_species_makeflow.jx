@@ -66,15 +66,36 @@
             ["Heuchera", "grossulariifolia"],
             ["Tiarella", "polyphylla"]
         ],
+        "LAYER_NAMES": [
+            "alt.asc",
+            "bio1.asc",
+            "bio2.asc",
+            "bio3.asc",
+            "bio4.asc",
+            "bio5.asc",
+            "bio6.asc",
+            "bio7.asc",
+            "bio8.asc",
+            "bio9.asc",
+            "bio10.asc",
+            "bio11.asc",
+            "bio12.asc",
+            "bio13.asc",
+            "bio14.asc",
+            "bio15.asc",
+            "bio16.asc",
+            "bio17.asc",
+            "bio18.asc",
+            "bio19.asc"
+        ],
         # Local (to workflow) directories to store files
-        "ENV_DIR": "model_env_dir",
+        "ENV_DIR": "environment",
         "SP_DIR": "species_dir",
         "MODEL_DIR": "models",
-        "WORKSPACE_MODELS": "model_workspace2",
         "TREE_FILENAME": "heuchera.tre",
         "TREE_SCHEMA": "newick",
-        "NUM_PERMUTATIONS": 10,
-        "NUM_GROUPS": 10,
+        "NUM_PERMUTATIONS": 10, # 100 for production
+        "NUM_GROUPS": 10, # 100 for production
         "WORKSPACE_DIR": "heuchera_rad",
         "WRANGLER_CONFIG_DIR": "wrangler_configs",
         "PERMUTATIONS_DIR": "permutations"
@@ -241,6 +262,71 @@
             ],
             "outputs": [ WORKSPACE_DIR + "/site_stats.lmm" ]
         },
+        # Move environment data into workspace
+        {
+            "command": join(
+                [
+                    "cp -r",
+                    ENV_DIR,
+                    join([WORKSPACE_DIR, ENV_DIR], "/")
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        ENV_DIR,
+                        LAYER
+                    ],
+                    "/"
+                ) for LAYER in LAYER_NAMES
+            ]
+        },
+        # Encode environment data for MCPA
+        {
+            "command": join(
+                [
+                    "encode_layers",
+                    "-m mean_value",
+                    WORKSPACE_DIR + "/heuchera_grid.shp",
+                    WORKSPACE_DIR + "/env_mtx.lmm",
+                    join(
+                        [
+                            "--layer",
+                            join(
+                                [
+                                    WORKSPACE_DIR,
+                                    ENV_DIR,
+                                    LAYER
+                                ],
+                                "/"
+                            )
+                        ],
+                        " "
+                    ) for LAYER in LAYER_NAMES
+                ],
+                " "
+            ),
+            "inputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        ENV_DIR,
+                        LAYER
+                    ],
+                    "/"
+                ) for LAYER in LAYER_NAMES,
+                WORKSPACE_DIR + "/heuchera_grid.dbf",
+                WORKSPACE_DIR + "/heuchera_grid.prj",
+                WORKSPACE_DIR + "/heuchera_grid.shp",
+                WORKSPACE_DIR + "/heuchera_grid.shx"
+            ],
+            "outputs": [ WORKSPACE_DIR + "/env_mtx.lmm" ]
+        },
+        # Encode biogeo for MCPA
+        # Encode tree for MCPA
 #        # Create observed MCPA
         # Create permutations directories
         {
