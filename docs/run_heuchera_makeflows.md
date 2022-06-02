@@ -15,7 +15,7 @@ cp -r ./test_cases/heuchera/uploads/* demo/
 Again, from the `complexify` repository root.
 
   ```commandline
-  docker-compose up
+  docker-compose up --scale worker=5
   ```
 
 ## Attach to the job flow container
@@ -25,6 +25,8 @@ Again, from the `complexify` repository root.
   ```
 
 ## Run the makeflows (from the job flow container)
+
+MAKE SURE TO START job name (-N arg) with "lm".  Workers look for that prefix.
 
 ### Run the split occurrences makeflow
   ```commandline
@@ -46,3 +48,8 @@ Note: Currently need to replace spaces with underscores in species filenames
   ```
 
 ### Run multispecies makeflow
+
+  ```commandline
+  # cd /demo/
+  # makeflow -C catalog_server:9097 -T wq -N lmheuchera-rad -a --jx multi_species_makeflow.jx
+  ```

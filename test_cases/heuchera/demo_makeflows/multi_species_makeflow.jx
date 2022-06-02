@@ -1,0 +1,740 @@
+{
+    "define" : {
+        "SPECIES": [
+            ["Heuchera", "longipetala"],
+            ["Heuchera", "brevistaminea"],
+            ["Mitella", "diphylla"],
+            ["Heuchera", "rosendahlii"],
+            ["Heuchera", "rubescens"],
+            ["Heuchera", "caespitosa"],
+            ["Peltoboykinia", "tellimoides"],
+            ["Mitella", "japonica"],
+            ["Mitella", "nuda"],
+            ["Heuchera", "sanguinea"],
+            ["Heuchera", "bracteata"],
+            ["Heuchera", "acutifolia"],
+            ["Mitella", "pentandra"],
+            ["Heuchera", "glomerulata"],
+            ["Heuchera", "maxima"],
+            ["Heuchera", "merriamii"],
+            ["Mitella", "caulescens"],
+            ["Tellima", "grandiflora"],
+            ["Heuchera", "parishii"],
+            ["Heuchera", "longiflora"],
+            ["Heuchera", "alba"],
+            ["Heuchera", "pilosissima"],
+            ["Heuchera", "pulchella"],
+            ["Heuchera", "cylindrica"],
+            ["Heuchera", "parvifolia"],
+            ["Heuchera", "woodsiaphila"],
+            ["Heuchera", "novomexicana"],
+            ["Lithophragma", "parviflorum"],
+            ["Heuchera", "mexicana"],
+            ["Heuchera", "glabra"],
+            ["Heuchera", "abramsii"],
+            ["Heuchera", "richardsonii"],
+            ["Heuchera", "pubescens"],
+            ["Heuchera", "eastwoodiae"],
+            ["Heuchera", "chlorantha"],
+            ["Heuchera", "parviflora"],
+            ["Heuchera", "villosa"],
+            ["Heuchera", "americana"],
+            ["Heuchera", "wellsiae"],
+            ["Heuchera", "inconstans"],
+            ["Heuchera", "wootonii"],
+            ["Mitella", "ovalis"],
+            ["Mitella", "pauciflora"],
+            ["Telesonix", "jamesii"],
+            ["Heuchera", "soltisii"],
+            ["Heuchera", "versicolor"],
+            ["Mitella", "stauropetala"],
+            ["Heuchera", "elegans"],
+            ["Heuchera", "caroliniana"],
+            ["Heuchera", "micrantha"],
+            ["Heuchera", "hallii"],
+            ["Heuchera", "missouriensis"],
+            ["Mitella", "furusei"],
+            ["Menziesii"],
+            ["Elmera", "racemosa"],
+            ["Heuchera", "puberula"],
+            ["Heuchera", "hirsutissima"],
+            ["Mitella", "stylosa"],
+            ["Diplomenziesii"],
+            ["Mitella", "breweri"],
+            ["Conimitella", "williamsii"],
+            ["Bensoniella", "oregona"],
+            ["Heuchera", "grossulariifolia"],
+            ["Tiarella", "polyphylla"]
+        ],
+        "LAYER_NAMES": [
+            "alt.asc",
+            "bio1.asc",
+            "bio2.asc",
+            "bio3.asc",
+            "bio4.asc",
+            "bio5.asc",
+            "bio6.asc",
+            "bio7.asc",
+            "bio8.asc",
+            "bio9.asc",
+            "bio10.asc",
+            "bio11.asc",
+            "bio12.asc",
+            "bio13.asc",
+            "bio14.asc",
+            "bio15.asc",
+            "bio16.asc",
+            "bio17.asc",
+            "bio18.asc",
+            "bio19.asc"
+        ],
+        "HYPOTHESES": [
+            "Continental_Divide",
+            "Eastern_Divide",
+            "Eastern_NA_and_Plains",
+            "Great_Basin",
+            "Gulf_of_California_Xeric_scrub",
+            "Last_Glacial_Maximum",
+            "Mississippi_River",
+            "Rocky_Mountains",
+            "Sierra_Madre_Oriental_Pine-Oak_Forests"
+        ],
+        "HYPOTHESIS_DIR": "hypotheses",
+        "HYPOTHESIS_EXTENSIONS": [".dbf", ".prj", ".qpj", ".shp", ".shx"],
+        # Local (to workflow) directories to store files
+        "ENV_DIR": "environment",
+        "SP_DIR": "species_dir",
+        "MODEL_DIR": "models",
+        "TREE_FILENAME": "heuchera.tre",
+        "TREE_SCHEMA": "newick",
+        "NUM_PERMUTATIONS": 10, # 100 for production
+        "NUM_GROUPS": 10, # 100 for production
+        "WORKSPACE_DIR": "heuchera_rad",
+        "WRANGLER_CONFIG_DIR": "wrangler_configs",
+        "PERMUTATIONS_DIR": "permutations"
+    },
+    "rules" : [
+        # Create workspace directory
+        {
+            "command": template("mkdir {WORKSPACE_DIR}; touch {WORKSPACE_DIR}/workspace_dir.txt"),
+            "inputs": [ ],
+            "outputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ]
+        },
+        # Move data wranglers into workspace
+        {
+            "command": join(
+                [
+                    "cp",
+                    "-r",
+                    "wrangler_configs",
+                    template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}")
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_pam_wrangler_config.json"),
+                template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_tree_wrangler_config.json")
+            ],
+            "local_job": true
+        },
+        # Move models into workspace
+        {
+            "command": join(
+                [
+                    "mkdir",
+                     join([WORKSPACE_DIR, MODEL_DIR], "/"),
+                     "; cp",
+                     join([MODEL_DIR, "*"], "/"),
+                     join([WORKSPACE_DIR, MODEL_DIR], "/")
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        MODEL_DIR,
+                        join(SP, "_") + "_model.asc"
+                    ],
+                    "/"
+                ) for SP in SPECIES
+            ],
+            "local_job": true
+        },
+        # Build grid
+        {
+            "command": join(
+                [
+                    "build_grid",
+                    template("{WORKSPACE_DIR}/heuchera_grid.shp"),
+                    "-180 0 0 90 1 4326"
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                WORKSPACE_DIR + "/heuchera_grid.dbf",
+                WORKSPACE_DIR + "/heuchera_grid.prj",
+                WORKSPACE_DIR + "/heuchera_grid.shp",
+                WORKSPACE_DIR + "/heuchera_grid.shx"
+            ]
+        },
+        # Create PAM
+        {
+            "command": join(
+                [
+                    "encode_layers",
+                    "-m presence_absence",
+                    "--min_coverage=5",
+                    "--min_presence=1",
+                    "--max_presence=254",
+                    WORKSPACE_DIR + "/heuchera_grid.shp",
+                    WORKSPACE_DIR + "/raw_pam.lmm",
+                    join(
+                        [
+                            "--layer",
+                            join([WORKSPACE_DIR, MODEL_DIR, join(SP, "_") + "_model.asc"], "/"),
+                            "\"" + join(SP, " ") + "\""
+                        ],
+                        " "
+                    ) for SP in SPECIES
+                ],
+                " "
+            ),
+            "inputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        MODEL_DIR,
+                        join(SP, "_") + "_model.asc"
+                    ],
+                    "/"
+                ) for SP in SPECIES,
+                WORKSPACE_DIR + "/heuchera_grid.dbf",
+                WORKSPACE_DIR + "/heuchera_grid.prj",
+                WORKSPACE_DIR + "/heuchera_grid.shp",
+                WORKSPACE_DIR + "/heuchera_grid.shx"
+            ],
+            "outputs": [ WORKSPACE_DIR + "/raw_pam.lmm" ],
+        },
+        # Wrangle tree
+        {
+            "command": join(
+                [
+                    "wrangle_tree",
+                    TREE_FILENAME,
+                    TREE_SCHEMA,
+                    template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_tree_wrangler_config.json"),
+                    WORKSPACE_DIR + "/processed_tree.tre",
+                    "newick"
+                ],
+                " "
+            ),
+            "inputs": [
+                TREE_FILENAME,
+                WORKSPACE_DIR + "/raw_pam.lmm",
+                template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_tree_wrangler_config.json")
+            ],
+            "outputs": [ WORKSPACE_DIR + "/processed_tree.tre" ]
+        },
+        # Wrangle matrix
+        {
+            "command": join(
+                [
+                    "wrangle_matrix",
+                    WORKSPACE_DIR + "/raw_pam.lmm",
+                    template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_pam_wrangler_config.json"),
+                    WORKSPACE_DIR + "/pam.lmm"
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/raw_pam.lmm",
+                template("{WORKSPACE_DIR}/{WRANGLER_CONFIG_DIR}/raw_pam_wrangler_config.json"),
+                WORKSPACE_DIR + "/processed_tree.tre"
+            ],
+            "outputs": [ WORKSPACE_DIR + "/pam.lmm" ]
+        },
+#        # Create tree matrix?
+        # Create observed stats
+        {
+            "command": join(
+                [
+                    "calculate_pam_stats",
+                    "--tree_filename=" + WORKSPACE_DIR + "/processed_tree.tre",
+                    "--site_stats_matrix=" + WORKSPACE_DIR + "/site_stats.lmm",
+                    WORKSPACE_DIR + "/pam.lmm"
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/pam.lmm",
+                WORKSPACE_DIR + "/processed_tree.tre"
+            ],
+            "outputs": [ WORKSPACE_DIR + "/site_stats.lmm" ]
+        },
+        # Move environment data into workspace
+        {
+            "command": join(
+                [
+                    "cp -r",
+                    ENV_DIR,
+                    join([WORKSPACE_DIR, ENV_DIR], "/")
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        ENV_DIR,
+                        LAYER
+                    ],
+                    "/"
+                ) for LAYER in LAYER_NAMES
+            ],
+            "local_job": true
+        },
+        # Encode environment data for MCPA
+        {
+            "command": join(
+                [
+                    "encode_layers",
+                    "-m mean_value",
+                    WORKSPACE_DIR + "/heuchera_grid.shp",
+                    WORKSPACE_DIR + "/env_mtx.lmm",
+                    join(
+                        [
+                            "--layer",
+                            join(
+                                [
+                                    WORKSPACE_DIR,
+                                    ENV_DIR,
+                                    LAYER
+                                ],
+                                "/"
+                            )
+                        ],
+                        " "
+                    ) for LAYER in LAYER_NAMES
+                ],
+                " "
+            ),
+            "inputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        ENV_DIR,
+                        LAYER
+                    ],
+                    "/"
+                ) for LAYER in LAYER_NAMES,
+                WORKSPACE_DIR + "/heuchera_grid.dbf",
+                WORKSPACE_DIR + "/heuchera_grid.prj",
+                WORKSPACE_DIR + "/heuchera_grid.shp",
+                WORKSPACE_DIR + "/heuchera_grid.shx"
+            ],
+            "outputs": [ WORKSPACE_DIR + "/env_mtx.lmm" ]
+        },
+        # Move hypotheses into workspace
+        {
+            "command": join(
+                [
+                    "cp -r",
+                    HYPOTHESIS_DIR,
+                    join([WORKSPACE_DIR, HYPOTHESIS_DIR], "/")
+                ],
+                " "
+            ),
+            "inputs": [ WORKSPACE_DIR + "/workspace_dir.txt" ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        HYPOTHESIS_DIR,
+                        HYPOTHESIS + EXT
+                    ],
+                    "/"
+                ) for HYPOTHESIS in HYPOTHESES for EXT in HYPOTHESIS_EXTENSIONS
+            ],
+            "local_job": true
+        },
+        # Encode biogeo for MCPA
+        {
+            "command": join(
+                [
+                    "encode_layers",
+                    "-m biogeo",
+                    WORKSPACE_DIR + "/heuchera_grid.shp",
+                    WORKSPACE_DIR + "/biogeo.lmm",
+                    join(
+                        [
+                            "--layer",
+                            join(
+                                [
+                                    WORKSPACE_DIR,
+                                    HYPOTHESIS_DIR,
+                                    HYPOTHESIS + ".shp"
+                                ],
+                                "/"
+                            )
+                        ],
+                        " "
+                    ) for HYPOTHESIS in HYPOTHESES
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/heuchera_grid.dbf",
+                WORKSPACE_DIR + "/heuchera_grid.prj",
+                WORKSPACE_DIR + "/heuchera_grid.shp",
+                WORKSPACE_DIR + "/heuchera_grid.shx",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        HYPOTHESIS_DIR,
+                        HYPOTHESIS + EXT
+                    ],
+                    "/"
+                ) for HYPOTHESIS in HYPOTHESES for EXT in HYPOTHESIS_EXTENSIONS
+            ],
+            "outputs": [ WORKSPACE_DIR + "/biogeo.lmm" ]
+        },
+        # Encode tree for MCPA
+        {
+            "command": join(
+                [
+                    "encode_tree_mcpa",
+                    WORKSPACE_DIR + "/processed_tree.tre",
+                    "newick",
+                    WORKSPACE_DIR + "/pam.lmm",
+                    WORKSPACE_DIR + "/mcpa_tree.lmm"
+                ]
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/processed_tree.tre",
+                WORKSPACE_DIR + "/pam.lmm"
+            ],
+            "outputs": [
+                WORKSPACE_DIR + "/mcpa_tree.lmm"
+            ]
+        },
+        # Create observed MCPA
+        {
+            "command": join(
+                [
+                    "mcpa_run",
+                    WORKSPACE_DIR + "/pam.lmm",
+                    WORKSPACE_DIR + "/mcpa_tree.lmm",
+                    WORKSPACE_DIR + "/env_mtx.lmm",
+                    WORKSPACE_DIR + "/biogeo.lmm",
+                    WORKSPACE_DIR + "/mcpa_observed.lmm",
+                    WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm"
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/pam.lmm",
+                WORKSPACE_DIR + "/mcpa_tree.lmm",
+                WORKSPACE_DIR + "/env_mtx.lmm",
+                WORKSPACE_DIR + "/biogeo.lmm"
+            ],
+            "outputs": [
+                WORKSPACE_DIR + "/mcpa_observed.lmm",
+                WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm"
+            ]
+        },
+        # Create permutations directories
+        {
+            "command": join(
+                [
+                    "mkdir",
+                    "-p",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}")
+                        ],
+                        "/"
+                    )
+                ]
+            ),
+            "inputs": [ ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}")
+                    ],
+                    "/"
+                )
+            ]
+        } for GROUP in range(NUM_GROUPS),
+        # Randomize PAM
+        {
+            "command": join(
+                [
+                    "randomize_pam",
+                    WORKSPACE_DIR + "/pam.lmm",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}"),
+                            template("random_pam_{PERMUTATION}.lmm")
+                        ],
+                        "/"
+                    )
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/pam.lmm",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}")
+                    ],
+                    "/"
+                )
+            ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}"),
+                        template("random_pam_{PERMUTATION}.lmm")
+                    ],
+                    "/"
+                )
+            ]
+        } for PERMUTATION in range(NUM_PERMUTATIONS) for GROUP in range(NUM_GROUPS),
+        # Create random MCPA stats
+        {
+            "command": join(
+                [
+                    "mcpa_run",
+                    template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/random_pam_{PERMUTATION}.lmm"),
+                    WORKSPACE_DIR + "/mcpa_tree.lmm",
+                    WORKSPACE_DIR + "/env_mtx.lmm",
+                    WORKSPACE_DIR + "/biogeo.lmm",
+                    template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/mcpa_{PERMUTATION}.lmm"),
+                    template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/rand_f_matrix_{PERMUTATION}.lmm")
+                ],
+                " "
+            ),
+            "inputs": [
+                template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/random_pam_{PERMUTATION}.lmm"),
+                WORKSPACE_DIR + "/mcpa_tree.lmm",
+                WORKSPACE_DIR + "/env_mtx.lmm",
+                WORKSPACE_DIR + "/biogeo.lmm"
+            ],
+            "outputs": [
+                template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/rand_f_matrix_{PERMUTATION}.lmm")
+            ]
+        } for PERMUTATION in range(NUM_PERMUTATIONS) for GROUP in range(NUM_GROUPS),
+        # Create random PAM stats
+        {
+            "command": join(
+                [
+                    "calculate_pam_stats",
+                    "--tree_filename=" + WORKSPACE_DIR + "/processed_tree.tre",
+                    template("--site_stats_matrix={WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/site_stats_{PERMUTATION}.lmm"),
+                    template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/random_pam_{PERMUTATION}.lmm")
+                ],
+                " "
+            ),
+            "inputs": [
+                template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/random_pam_{PERMUTATION}.lmm"),
+                WORKSPACE_DIR + "/processed_tree.tre"
+            ],
+            "outputs": [
+                template("{WORKSPACE_DIR}/{PERMUTATIONS_DIR}/group_{GROUP}/site_stats_{PERMUTATION}.lmm")
+            ]
+        } for PERMUTATION in range(NUM_PERMUTATIONS) for GROUP in range(NUM_GROUPS),
+        # Compute and aggregate p-values (for each group)
+        {
+            "command": join(
+                [
+                    "calculate_p_values",
+                    "-n",
+                    template("{NUM_PERMUTATIONS}"),
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/site_stat_p_values.lmm")
+                        ],
+                        "/"
+                    ),
+                    WORKSPACE_DIR + "/site_stats.lmm",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/site_stats_{PERMUTATION}.lmm")
+                        ],
+                        "/"
+                    ) for PERMUTATION in range(NUM_PERMUTATIONS)
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/site_stats.lmm",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/site_stats_{PERMUTATION}.lmm")
+                    ],
+                    "/"
+                ) for PERMUTATION in range(NUM_PERMUTATIONS)
+            ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/site_stat_p_values.lmm")
+                    ],
+                    "/"
+                ),
+            ]
+        } for GROUP in range(NUM_GROUPS),
+        # Compute and aggregate p-values (aggregate groups) and determine significance
+        {
+            "command": join(
+                [
+                    "calculate_p_values",
+                    "-m fdr",
+                    "-n",
+                    template("{NUM_PERMUTATIONS}"),
+                    "-s",
+                    WORKSPACE_DIR + "/significant_site_stats.lmm",
+                    WORKSPACE_DIR + "/site_stats_p_values.lmm",
+                    WORKSPACE_DIR + "/site_stats.lmm",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/site_stat_p_values.lmm")
+                        ],
+                        "/"
+                    ) for GROUP in range(NUM_GROUPS)
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/site_stats.lmm",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/site_stat_p_values.lmm")
+                    ],
+                    "/"
+                ) for GROUP in range(NUM_GROUPS)
+            ],
+            "outputs": [
+                WORKSPACE_DIR + "/significant_site_stats.lmm",
+                WORKSPACE_DIR + "/site_stats_p_values.lmm",
+            ]
+        },
+        # Aggregate MCPA
+        # Compute and aggregate MCPA p-values (for each group)
+        {
+            "command": join(
+                [
+                    "calculate_p_values",
+                    "-n",
+                    template("{NUM_PERMUTATIONS}"),
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/mcpa_f_values.lmm")
+                        ],
+                        "/"
+                    ),
+                    WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/rand_f_matrix_{PERMUTATION}.lmm")
+                        ],
+                        "/"
+                    ) for PERMUTATION in range(NUM_PERMUTATIONS)
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/rand_f_matrix_{PERMUTATION}.lmm")
+                    ],
+                    "/"
+                ) for PERMUTATION in range(NUM_PERMUTATIONS)
+            ],
+            "outputs": [
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/mcpa_f_values.lmm")
+                    ],
+                    "/"
+                ),
+            ]
+        } for GROUP in range(NUM_GROUPS),
+        # Compute and aggregate p-values (aggregate groups) and determine significance for MCPA
+        {
+            "command": join(
+                [
+                    "calculate_p_values",
+                    "-m fdr",
+                    "-n",
+                    template("{NUM_PERMUTATIONS}"),
+                    "-s",
+                    WORKSPACE_DIR + "/mcpa_significant_values.lmm",
+                    WORKSPACE_DIR + "/mcpa_p_values.lmm",
+                    WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm",
+                    join(
+                        [
+                            WORKSPACE_DIR,
+                            PERMUTATIONS_DIR,
+                            template("group_{GROUP}/mcpa_f_values.lmm")
+                        ],
+                        "/"
+                    ) for GROUP in range(NUM_GROUPS)
+                ],
+                " "
+            ),
+            "inputs": [
+                WORKSPACE_DIR + "/mcpa_observed_f_matrix.lmm",
+                join(
+                    [
+                        WORKSPACE_DIR,
+                        PERMUTATIONS_DIR,
+                        template("group_{GROUP}/mcpa_f_values.lmm")
+                    ],
+                    "/"
+                ) for GROUP in range(NUM_GROUPS)
+            ],
+            "outputs": [
+                WORKSPACE_DIR + "/mcpa_significant_values.lmm",
+                WORKSPACE_DIR + "/mcpa_p_values.lmm",
+            ]
+        }
+    ]
+}
