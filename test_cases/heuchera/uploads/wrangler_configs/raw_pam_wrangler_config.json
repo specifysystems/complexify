@@ -1,0 +1,7 @@
+[
+  {
+    "wrangler_type": "MatchTreeMatrixWrangler",
+    "tree": "heuchera_rad/processed_tree.tre",
+    "species_axis": 1
+  }
+]
